@@ -1,0 +1,56 @@
+Description: fix for tap >= 15
+Author: Yadd <yadd@debian.org>
+Bug-Debian: https://bugs.debian.org/1009512
+Forwarded: no
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2022-04-14
+
+--- a/README.md
++++ b/README.md
+@@ -143,7 +143,7 @@
+ complete when it does, or do something like:
+ 
+ ```js
+-  tacksAreTheSame(t, actual, expected, 'got the expected results').then(t.done)
++  tacksAreTheSame(t, actual, expected, 'got the expected results').then(t.end)
+ ```
+ 
+ or
+@@ -151,7 +151,7 @@
+ ```js
+   tacksAreTheSame(t, actual, expected, 'got the expected results').then(function () {
+     … more tests …
+-    t.done()
++    t.end()
+   })
+ ```
+ 
+--- a/tap.js
++++ b/tap.js
+@@ -2,7 +2,7 @@
+ exports.areTheSame = function (tap, actual, expected, msg) {
+   return tap.test(msg, function (t) {
+     compare(t, '/', actual.fixture, expected.fixture)
+-    t.done()
++    t.end()
+   })
+ }
+ 
+--- a/test/functional.js
++++ b/test/functional.js
+@@ -69,7 +69,7 @@
+ test('setup', function (t) {
+   rimraf.sync(testroot)
+   setup()
+-  t.done()
++  t.end()
+ })
+ 
+ test('loadFromDir', function (t) {
+@@ -93,5 +93,5 @@
+     t.pass(testdir + ' should not exist')
+   }
+   rimraf.sync(testroot)
+-  t.done()
++  t.end()
+ })
